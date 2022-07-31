@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".screens.welcome.WelcomeFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/welcome_background"
+            android:layout_width="564dp"
+            android:layout_height="833dp"
+            android:adjustViewBounds="true"
+            android:clickable="false"
+            android:contentDescription="@string/hello_blank_fragment"
+            android:scaleType="centerCrop"
+            android:src="@drawable/welcome_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/welcome_vinyla_logo_square_shadow"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="110dp"
+            android:layout_marginEnd="110dp"
+            android:layout_marginBottom="100dp"
+            android:contentDescription="@string/welcome_vinyla_logo_square_shadow_contentDescription"
+            android:src="@drawable/vinyla_logo_square_shadow"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+
+            <Button
+                android:id="@+id/welcome_login_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_border"
+                android:fontFamily="@font/libre_baskerville"
+                android:minWidth="140dp"
+                android:minHeight="50dp"
+                android:text="@string/login"
+                android:textColor="@color/black"
+                app:layout_constraintBaseline_toBaselineOf="@+id/welcome_register_button"
+                app:layout_constraintEnd_toStartOf="@+id/welcome_register_button"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/welcome_register_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_border"
+                android:backgroundTint="@color/black"
+                android:fontFamily="@font/libre_baskerville"
+                android:minWidth="140dp"
+                android:minHeight="50dp"
+                android:text="@string/register"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/welcome_login_button"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

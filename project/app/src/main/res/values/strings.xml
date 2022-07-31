@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">android-vinyla</string>
+    <string name="app_name">VINYLA</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="welcome_background_contentDescription">Background for the welcome screen.</string>
+    <string name="welcome_vinyla_logo_square_shadow_contentDescription">VINYLA square logo with drop shadow for the welcome screen.</string>
+    <string name="login">Log in</string>
+    <string name="register">Register</string>
+    <string name="vinyla_wide_logo_contentDescription">VINYLA wide logo.</string>
+    <string name="back_button">Back button.</string>
+    <string name="email_example">email@example.com</string>
+    <string name="firstname_example">firstname</string>
+    <string name="lastname_example">lastname</string>
+    <string name="password">password</string>
+    <string name="loginNoSpace">Login</string>
+    <string name="next">Next</string>
+    <string name="sign_up">Sign Up</string>
 </resources>
