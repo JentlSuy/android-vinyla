@@ -16,29 +16,31 @@ import com.example.android_vinyla.databinding.FragmentWelcomeBinding
 
 class LoginFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = LoginFragment()
-    }
-
     private lateinit var viewModel: LoginViewModel
+
+    private lateinit var binding: FragmentLoginBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: FragmentLoginBinding = DataBindingUtil.inflate(
+        // INITIALIZING BINDING
+        binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_login, container, false
         )
+        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
+
+        binding.loginViewModel = viewModel
+
+        binding.lifecycleOwner = this
+
         binding.loginBackButton.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_welcomeFragment)
         }
+
+        binding.loginButton.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+        }
         return binding.root
     }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
-
 }

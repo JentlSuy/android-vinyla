@@ -11,8 +11,8 @@
 
         <ImageView
             android:id="@+id/welcome_background"
-            android:layout_width="564dp"
-            android:layout_height="833dp"
+            android:layout_width="590dp"
+            android:layout_height="1444dp"
             android:adjustViewBounds="true"
             android:clickable="false"
             android:contentDescription="@string/hello_blank_fragment"

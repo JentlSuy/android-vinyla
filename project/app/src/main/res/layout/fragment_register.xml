@@ -5,6 +5,7 @@
     tools:context=".screens.register.RegisterFragment">
 
     <data>
+
         <variable
             name="registerViewModel"
             type="com.example.android_vinyla.screens.register.RegisterViewModel" />
@@ -99,6 +100,17 @@
             tools:ignore="TouchTargetSizeCheck" />
 
         <!--   STEP 2 - FIRSTNAME     -->
+        <TextView
+            android:id="@+id/register_password_reset_warning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:fontFamily="@font/libre_baskerville_bold"
+            android:text="@string/register_password_reset_warning"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/black" />
+
         <EditText
             android:id="@+id/register_firstname_input"
             style="@style/edit_text"

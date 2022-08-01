@@ -40,16 +40,35 @@ class RegisterFragment : Fragment() {
         binding.registerNextButton.setOnClickListener {
             //            email = binding.
             //            binding.registerEmailInput.setError()
-            viewModel.checkEmail(binding.registerEmailInput.text.toString())
-            viewModel.checkPassword(binding.registerPasswordInput.text.toString())
-            binding.registerBackButton.visibility = View.GONE
-            binding.registerEmailInput.visibility = View.GONE
-            binding.registerPasswordInput.visibility = View.GONE
-            binding.registerFirstnameInput.visibility = View.VISIBLE
-            binding.registerLastnameInput.visibility = View.VISIBLE
-            binding.registerNextButton.visibility = View.GONE
-            binding.registerBackButtonStep2.visibility = View.VISIBLE
-            binding.registerSignupButton.visibility = View.VISIBLE
+
+            var step1ValidationCorrect = true
+
+            if (!viewModel.checkEmail(binding.registerEmailInput.text.toString())) {
+                binding.registerEmailInput.setError("Incorrect email!")
+                step1ValidationCorrect = false
+            }
+
+
+            if (!viewModel.checkPassword(binding.registerPasswordInput.text.toString())) {
+                binding.registerPasswordInput.setError("Password must meet the requirements of at least 8 characters, 1 lowercase, 1 uppercase, 1 numeric & 1 special character!")
+                step1ValidationCorrect = false
+            }
+
+            // DEVELOPMENT PURPOSES!!!
+            step1ValidationCorrect = true
+            // TODO
+
+            if (step1ValidationCorrect) {
+                binding.registerBackButton.visibility = View.GONE
+                binding.registerEmailInput.visibility = View.GONE
+                binding.registerPasswordInput.visibility = View.GONE
+                binding.registerFirstnameInput.visibility = View.VISIBLE
+                binding.registerLastnameInput.visibility = View.VISIBLE
+                binding.registerNextButton.visibility = View.GONE
+                binding.registerBackButtonStep2.visibility = View.VISIBLE
+                binding.registerSignupButton.visibility = View.VISIBLE
+                binding.registerPasswordResetWarning.visibility = View.GONE
+            }
         }
         binding.registerBackButtonStep2.setOnClickListener {
             binding.registerBackButton.visibility = View.VISIBLE
@@ -60,9 +79,32 @@ class RegisterFragment : Fragment() {
             binding.registerNextButton.visibility = View.VISIBLE
             binding.registerSignupButton.visibility = View.GONE
             binding.registerBackButtonStep2.visibility = View.GONE
+            binding.registerPasswordResetWarning.visibility = View.VISIBLE
         }
         binding.registerSignupButton.setOnClickListener {
-            Log.i("RegisterFragment", "SignUp button was pressed! Creating account...")
+            var step2ValidationCorrect = true
+
+            if (!viewModel.checkName(binding.registerFirstnameInput.text.toString(), true)) {
+                step2ValidationCorrect = false
+                binding.registerFirstnameInput.setError("Cannot be empty!")
+            }
+            if (!viewModel.checkName(binding.registerLastnameInput.text.toString(), false)) {
+                step2ValidationCorrect = false
+                binding.registerLastnameInput.setError("Cannot be empty!")
+            }
+
+            // DEVELOPMENT PURPOSES!!!
+            step2ValidationCorrect = true
+            // TODO
+
+            if (step2ValidationCorrect) {
+                // TODO
+                Log.i(
+                    "RegisterFragment",
+                    "SignUp button was pressed! Creating account...\n${viewModel.email.value}\n${viewModel.password.value}\n${viewModel.firstname.value}\n${viewModel.lastname.value}"
+                )
+                findNavController().navigate(R.id.action_registerFragment_to_mainFragment)
+            }
         }
         return binding.root
     }
