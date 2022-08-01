@@ -5,11 +5,24 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.android_vinyla.network.LoginRequestProperty
+import com.example.android_vinyla.network.VinylaApi
+import com.example.android_vinyla.network.VinylaApiService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RegisterViewModel : ViewModel() {
 
     private val _email = MutableLiveData<String>()
     val email: LiveData<String> get() = _email
+
+    private val _emailAvailable = MutableLiveData<String>()
+    val emailAvailable: LiveData<String> get() = _emailAvailable
 
     private val _password = MutableLiveData<String>()
     val password: LiveData<String> get() = _password
@@ -27,12 +40,36 @@ class RegisterViewModel : ViewModel() {
         } else {
             if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 _email.value = email
-                Log.i("RegisterViewModel", "CORRECT EMAIL -> ${_email.value.toString()}")
+                Log.i("RegisterViewModel", "VALID EMAIL -> ${_email.value.toString()}")
                 return true
             }
-            Log.i("RegisterViewModel", "INCORRECT EMAIL -> $email")
+            Log.i("RegisterViewModel", "INVALID EMAIL -> $email")
             return false
         }
+    }
+
+    private var viewModelJob = Job()
+    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+
+    fun checkEmailInUse() {
+        coroutineScope.launch {
+            // 3
+            Log.i("RegisterViewModel", "Checking " + _email.value.toString())
+            var getResultDeferred = VinylaApi.retrofitService.checkEmailInUse(
+                _email.value.toString()
+            )
+
+            try {
+                _emailAvailable.value = getResultDeferred.await()
+                Log.i("RegisterViewModel", "Try - Response: " + _emailAvailable.value.toString())
+            } catch (t: Throwable) {
+                Log.i("RegisterViewModel", "Catch - Response: " + t.message)
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
     }
 
     fun checkPassword(password: String): Boolean {

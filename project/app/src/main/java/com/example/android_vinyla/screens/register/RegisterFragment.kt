@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.android_vinyla.R
 import com.example.android_vinyla.databinding.FragmentLoginBinding
@@ -18,6 +19,8 @@ class RegisterFragment : Fragment() {
     private lateinit var viewModel: RegisterViewModel
 
     private lateinit var binding: FragmentRegisterBinding
+
+    private var step1ValidationCorrect = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,44 +36,65 @@ class RegisterFragment : Fragment() {
 
         binding.lifecycleOwner = this
 
+        // DEVELOPMENT PURPOSES!!!
+        binding.registerEmailInput.setText("suy.jentl@gmail.com")
+        binding.registerPasswordInput.setText("P@ssword1999")
+        binding.registerFirstnameInput.setText("FirstName")
+        binding.registerLastnameInput.setText("LastName")
+        // TODO
+
         // SETTING ONCLICKLISTENERS
         binding.registerBackButton.setOnClickListener {
             findNavController().navigate(R.id.action_registerFragment_to_welcomeFragment)
         }
         binding.registerNextButton.setOnClickListener {
-            //            email = binding.
-            //            binding.registerEmailInput.setError()
 
-            var step1ValidationCorrect = true
 
             if (!viewModel.checkEmail(binding.registerEmailInput.text.toString())) {
                 binding.registerEmailInput.setError("Incorrect email!")
                 step1ValidationCorrect = false
             }
 
+            viewModel.checkEmailInUse()
 
-            if (!viewModel.checkPassword(binding.registerPasswordInput.text.toString())) {
-                binding.registerPasswordInput.setError("Password must meet the requirements of at least 8 characters, 1 lowercase, 1 uppercase, 1 numeric & 1 special character!")
-                step1ValidationCorrect = false
-            }
+            viewModel.emailAvailable.observe(viewLifecycleOwner, Observer {
+                if (null != it) {
+                    Log.i("RegisterFragment", "ContentEquals")
+                    if (viewModel.emailAvailable.value.contentEquals("false")) {
+                        binding.registerEmailInput.setError("The given email address is already in use!")
+                        step1ValidationCorrect = false
+                        // 2
+                        Log.i("RegisterFragment", "Fragment STOP - MAIL IN USE")
+                    } else {
+                        step1ValidationCorrect = true
+                        binding.registerEmailInput.setError(null)
+                    }
+                    if (!viewModel.checkPassword(binding.registerPasswordInput.text.toString())) {
+                        binding.registerPasswordInput.setError("Password must meet the requirements of at least 8 characters, 1 lowercase, 1 uppercase, 1 numeric & 1 special character!")
+                        step1ValidationCorrect = false
+                    }
 
-            // DEVELOPMENT PURPOSES!!!
-            step1ValidationCorrect = true
-            // TODO
+                    Log.i("RegisterFragment", "step1ValidationCorrect " + step1ValidationCorrect)
 
-            if (step1ValidationCorrect) {
-                binding.registerBackButton.visibility = View.GONE
-                binding.registerEmailInput.visibility = View.GONE
-                binding.registerPasswordInput.visibility = View.GONE
-                binding.registerFirstnameInput.visibility = View.VISIBLE
-                binding.registerLastnameInput.visibility = View.VISIBLE
-                binding.registerNextButton.visibility = View.GONE
-                binding.registerBackButtonStep2.visibility = View.VISIBLE
-                binding.registerSignupButton.visibility = View.VISIBLE
-                binding.registerPasswordResetWarning.visibility = View.GONE
-            }
+                    if (step1ValidationCorrect) {
+                        binding.registerBackButton.visibility = View.GONE
+                        binding.registerEmailInput.visibility = View.GONE
+                        binding.registerPasswordInput.visibility = View.GONE
+                        binding.registerFirstnameInput.visibility = View.VISIBLE
+                        binding.registerLastnameInput.visibility = View.VISIBLE
+                        binding.registerNextButton.visibility = View.GONE
+                        binding.registerBackButtonStep2.visibility = View.VISIBLE
+                        binding.registerSignupButton.visibility = View.VISIBLE
+                        binding.registerPasswordResetWarning.visibility = View.GONE
+                        // !!!! step1ValidationCorrect = false
+                    }
+                }
+            })
+
+
         }
         binding.registerBackButtonStep2.setOnClickListener {
+            step1ValidationCorrect = false
             binding.registerBackButton.visibility = View.VISIBLE
             binding.registerEmailInput.visibility = View.VISIBLE
             binding.registerPasswordInput.visibility = View.VISIBLE
@@ -80,6 +104,7 @@ class RegisterFragment : Fragment() {
             binding.registerSignupButton.visibility = View.GONE
             binding.registerBackButtonStep2.visibility = View.GONE
             binding.registerPasswordResetWarning.visibility = View.VISIBLE
+            step1ValidationCorrect = false
         }
         binding.registerSignupButton.setOnClickListener {
             var step2ValidationCorrect = true
@@ -92,10 +117,6 @@ class RegisterFragment : Fragment() {
                 step2ValidationCorrect = false
                 binding.registerLastnameInput.setError("Cannot be empty!")
             }
-
-            // DEVELOPMENT PURPOSES!!!
-            step2ValidationCorrect = true
-            // TODO
 
             if (step2ValidationCorrect) {
                 // TODO

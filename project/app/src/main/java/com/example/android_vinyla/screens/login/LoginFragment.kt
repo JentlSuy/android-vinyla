@@ -7,8 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.set
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.android_vinyla.R
 import com.example.android_vinyla.databinding.FragmentLoginBinding
@@ -19,6 +21,7 @@ class LoginFragment : Fragment() {
     private lateinit var viewModel: LoginViewModel
 
     private lateinit var binding: FragmentLoginBinding
+    private var _correctPassword = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,12 +37,26 @@ class LoginFragment : Fragment() {
 
         binding.lifecycleOwner = this
 
+        // DEV TODO
+        binding.loginEmailInput.setText("suy.jentl@gmail.com")
+        binding.loginPasswordInput.setText("P@ssword1999")
+        // DEV
+
         binding.loginBackButton.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_welcomeFragment)
         }
 
         binding.loginButton.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+            //Log.i("LoginFragment: ", "TRYING TO LOGIN")
+            if (viewModel.logIn(
+                    binding.loginEmailInput.text.toString(),
+                    binding.loginPasswordInput.text.toString()
+                )
+            ) {
+                findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+            } else {
+                binding.loginPasswordInput.setError("The email address or password is incorrect.")
+            }
         }
         return binding.root
     }
