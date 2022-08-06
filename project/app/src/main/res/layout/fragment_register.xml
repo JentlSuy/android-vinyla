@@ -14,6 +14,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -100,6 +101,7 @@
             tools:ignore="TouchTargetSizeCheck" />
 
         <!--   STEP 2 - FIRSTNAME     -->
+
         <TextView
             android:id="@+id/register_password_reset_warning"
             android:layout_width="match_parent"
@@ -155,6 +157,14 @@
             android:text="@string/sign_up"
             android:textColor="@color/white"
             android:textSize="14sp"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/register_progressBar"
+            style="@android:style/Widget.Holo.ProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:visibility="gone" />
 
     </LinearLayout>

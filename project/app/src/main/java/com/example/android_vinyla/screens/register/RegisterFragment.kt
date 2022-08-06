@@ -2,6 +2,8 @@ package com.example.android_vinyla.screens.register
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -37,61 +39,67 @@ class RegisterFragment : Fragment() {
         binding.lifecycleOwner = this
 
         // DEVELOPMENT PURPOSES!!!
+        //binding.registerEmailInput.setText("testtest@test.com")
         binding.registerEmailInput.setText("suy.jentl@gmail.com")
         binding.registerPasswordInput.setText("P@ssword1999")
         binding.registerFirstnameInput.setText("FirstName")
         binding.registerLastnameInput.setText("LastName")
         // TODO
 
-        // SETTING ONCLICKLISTENERS
         binding.registerBackButton.setOnClickListener {
             findNavController().navigate(R.id.action_registerFragment_to_welcomeFragment)
         }
+
         binding.registerNextButton.setOnClickListener {
 
+            loading(true)
 
             if (!viewModel.checkEmail(binding.registerEmailInput.text.toString())) {
                 binding.registerEmailInput.setError("Incorrect email!")
                 step1ValidationCorrect = false
-            }
+                loading(false)
+            } else {
 
-            viewModel.checkEmailInUse()
+                viewModel.checkEmailInUse()
 
-            viewModel.emailAvailable.observe(viewLifecycleOwner, Observer {
-                if (null != it) {
-                    Log.i("RegisterFragment", "ContentEquals")
+                viewModel.emailAvailable.observe(viewLifecycleOwner, Observer {
                     if (viewModel.emailAvailable.value.contentEquals("false")) {
-                        binding.registerEmailInput.setError("The given email address is already in use!")
+                        val handler = Handler(Looper.getMainLooper())
+                        handler.postDelayed({
+                            binding.registerEmailInput.setError("The given email address is already in use!")
+                            loading(false)
+                        }, 1000)
                         step1ValidationCorrect = false
-                        // 2
-                        Log.i("RegisterFragment", "Fragment STOP - MAIL IN USE")
-                    } else {
+                    } else if (viewModel.emailAvailable.value.contentEquals("true")) {
                         step1ValidationCorrect = true
                         binding.registerEmailInput.setError(null)
                     }
                     if (!viewModel.checkPassword(binding.registerPasswordInput.text.toString())) {
                         binding.registerPasswordInput.setError("Password must meet the requirements of at least 8 characters, 1 lowercase, 1 uppercase, 1 numeric & 1 special character!")
                         step1ValidationCorrect = false
+                        loading(false)
                     }
 
-                    Log.i("RegisterFragment", "step1ValidationCorrect " + step1ValidationCorrect)
+                    //Log.i("RegisterFragment", "step1ValidationCorrect " + step1ValidationCorrect)
 
-                    if (step1ValidationCorrect) {
-                        binding.registerBackButton.visibility = View.GONE
-                        binding.registerEmailInput.visibility = View.GONE
-                        binding.registerPasswordInput.visibility = View.GONE
-                        binding.registerFirstnameInput.visibility = View.VISIBLE
-                        binding.registerLastnameInput.visibility = View.VISIBLE
-                        binding.registerNextButton.visibility = View.GONE
-                        binding.registerBackButtonStep2.visibility = View.VISIBLE
-                        binding.registerSignupButton.visibility = View.VISIBLE
-                        binding.registerPasswordResetWarning.visibility = View.GONE
-                        // !!!! step1ValidationCorrect = false
-                    }
-                }
-            })
+                    val handler = Handler(Looper.getMainLooper())
+                    handler.postDelayed({
+                        if (step1ValidationCorrect) {
+                            loading(false)
+                            binding.registerBackButton.visibility = View.GONE
+                            binding.registerEmailInput.visibility = View.GONE
+                            binding.registerPasswordInput.visibility = View.GONE
+                            binding.registerFirstnameInput.visibility = View.VISIBLE
+                            binding.registerLastnameInput.visibility = View.VISIBLE
+                            binding.registerNextButton.visibility = View.GONE
+                            binding.registerBackButtonStep2.visibility = View.VISIBLE
+                            binding.registerSignupButton.visibility = View.VISIBLE
+                            binding.registerPasswordResetWarning.visibility = View.GONE
+                        }
+                    }, 1000)
 
-
+                })
+            }
         }
         binding.registerBackButtonStep2.setOnClickListener {
             step1ValidationCorrect = false
@@ -104,6 +112,7 @@ class RegisterFragment : Fragment() {
             binding.registerSignupButton.visibility = View.GONE
             binding.registerBackButtonStep2.visibility = View.GONE
             binding.registerPasswordResetWarning.visibility = View.VISIBLE
+            binding.registerEmailInput.setError(null)
             step1ValidationCorrect = false
         }
         binding.registerSignupButton.setOnClickListener {
@@ -124,9 +133,22 @@ class RegisterFragment : Fragment() {
                     "RegisterFragment",
                     "SignUp button was pressed! Creating account...\n${viewModel.email.value}\n${viewModel.password.value}\n${viewModel.firstname.value}\n${viewModel.lastname.value}"
                 )
+
+                viewModel.signUp()
+
                 findNavController().navigate(R.id.action_registerFragment_to_mainFragment)
             }
         }
         return binding.root
+    }
+
+    fun loading(startLoading: Boolean) {
+        if (startLoading) {
+            binding.registerProgressBar.visibility = View.VISIBLE
+            binding.registerNextButton.visibility = View.GONE
+        } else if (!startLoading) {
+            binding.registerProgressBar.visibility = View.GONE
+            binding.registerNextButton.visibility = View.VISIBLE
+        }
     }
 }

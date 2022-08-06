@@ -33,6 +33,9 @@ interface VinylaApiService {
 
     @POST("Account")
     fun login(@Body body: LoginRequestProperty): Deferred<String>
+
+    @POST("Account/register")
+    fun register(@Body body: RegisterRequestProperty): Deferred<String>
 }
 
 object VinylaApi {
@@ -42,13 +45,13 @@ object VinylaApi {
 
     fun setBearerToken(token: String) {
         BEARER_TOKEN = token
-        // Log.i("VinylaApiService", "Token has been set: " + BEARER_TOKEN)
+        Log.i("VinylaApiService", "Token has been set: " + BEARER_TOKEN)
 
     }
 
     fun setEmail(email: String) {
         EMAIL = email
-        // Log.i("VinylaApiService", "Token has been set: " + BEARER_TOKEN)
+        Log.i("VinylaApiService", "Email has been set: " + EMAIL)
     }
 
     fun getEmail(): String {

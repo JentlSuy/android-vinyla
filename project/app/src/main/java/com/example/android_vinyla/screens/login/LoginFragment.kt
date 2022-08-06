@@ -2,6 +2,8 @@ package com.example.android_vinyla.screens.login
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -21,7 +23,7 @@ class LoginFragment : Fragment() {
     private lateinit var viewModel: LoginViewModel
 
     private lateinit var binding: FragmentLoginBinding
-    private var _correctPassword = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,17 +49,39 @@ class LoginFragment : Fragment() {
         }
 
         binding.loginButton.setOnClickListener {
-            //Log.i("LoginFragment: ", "TRYING TO LOGIN")
-            if (viewModel.logIn(
-                    binding.loginEmailInput.text.toString(),
-                    binding.loginPasswordInput.text.toString()
-                )
-            ) {
-                findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
-            } else {
-                binding.loginPasswordInput.setError("The email address or password is incorrect.")
+
+            loading(true)
+
+            viewModel.correctPassword.observe(viewLifecycleOwner, Observer {
+                //Log.i("LoginFragment: ", "TRYING TO LOGIN")
+                if (viewModel.logIn(
+                        binding.loginEmailInput.text.toString(),
+                        binding.loginPasswordInput.text.toString()
+                    )
+                ) {
+                    loading(false)
+                    findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+                } else {
+                    val handler = Handler(Looper.getMainLooper())
+                    handler.postDelayed({
+                        binding.loginPasswordInput.setError("The email address or password is incorrect.")
+                        loading(false)
+                    }, 1250)
+
+                }
             }
+            )
         }
         return binding.root
+    }
+
+    fun loading(startLoading: Boolean) {
+        if (startLoading) {
+            binding.loginProgressBar.visibility = View.VISIBLE
+            binding.loginButton.visibility = View.GONE
+        } else if (!startLoading) {
+            binding.loginProgressBar.visibility = View.GONE
+            binding.loginButton.visibility = View.VISIBLE
+        }
     }
 }
