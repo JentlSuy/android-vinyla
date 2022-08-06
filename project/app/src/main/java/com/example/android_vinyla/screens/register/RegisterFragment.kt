@@ -76,6 +76,7 @@ class RegisterFragment : Fragment() {
                     }
                     if (!viewModel.checkPassword(binding.registerPasswordInput.text.toString())) {
                         binding.registerPasswordInput.setError("Password must meet the requirements of at least 8 characters, 1 lowercase, 1 uppercase, 1 numeric & 1 special character!")
+                        binding.registerEmailInput.setError(null)
                         step1ValidationCorrect = false
                         loading(false)
                     }

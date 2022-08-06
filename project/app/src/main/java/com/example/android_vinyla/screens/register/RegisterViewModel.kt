@@ -89,6 +89,8 @@ class RegisterViewModel : ViewModel() {
                 Log.i("RegisterViewModel", "Catch - Response: " + t.message + t.toString())
             }
         }
+        // TODO null
+        //Log.i("RegisterViewModel", "Catch - Response BEARER: " + _bearerToken.value.toString())
         VinylaApi.setBearerToken(_bearerToken.value.toString())
         VinylaApi.setEmail(_email.value.toString())
     }
