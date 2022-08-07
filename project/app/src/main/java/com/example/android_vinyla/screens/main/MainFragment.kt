@@ -31,6 +31,10 @@ class MainFragment : Fragment() {
 
         binding.lifecycleOwner = this
 
+        binding.photosGrid.adapter = PhotoGridAdapter(PhotoGridAdapter.OnClickListener {
+            viewModel.displayPropertyDetails(it)
+        })
+
         return binding.root
     }
 }

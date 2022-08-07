@@ -15,4 +15,10 @@
     <string name="next">Next</string>
     <string name="sign_up">Sign Up</string>
     <string name="register_password_reset_warning">Passwords cannot be reset!</string>
+    <string name="loading_icon">Loading icon for grid view.</string>
+    <string name="your_top_x_artists">Your top %d artists</string>
+    <string name="main_settings_button_contentDescription">Settings button for the main screen.</string>
+    <string name="main_logout_button_contentDescription">Lougout button for the main screen.</string>
+    <string name="create_station">create station</string>
+    <string name="main_create_station_button_contentDescription">Creat station button for the main screen.</string>
 </resources>
