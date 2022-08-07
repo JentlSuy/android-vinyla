@@ -28,14 +28,13 @@ class MainViewModel : ViewModel() {
     private var _spotifyTokenProperty = MutableLiveData<SpotifyTokenProperty>()
     val spotifyTokenProperty: LiveData<SpotifyTokenProperty> get() = _spotifyTokenProperty
 
-    private lateinit var sortedMapAlbumCount: List<Map.Entry<String, Int>>
+    private var sortedMapAlbumCount: List<Map.Entry<String, Int>> = ArrayList()
 
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     init {
         getSpotifyToken()
-        getVinylaProperties()
     }
 
     private fun getSpotifyToken() {
@@ -49,6 +48,7 @@ class MainViewModel : ViewModel() {
             } catch (t: Throwable) {
                 Log.i("MainViewModel", "Failure: " + t.message)
             }
+            getVinylaProperties()
         }
     }
 
@@ -78,17 +78,40 @@ class MainViewModel : ViewModel() {
 
                 _response.value = "$responseString"
 
+                Log.i("MainViewModel", "Artists found: " + sortedMapAlbumCount.size)
+
                 //_response.value = "Success: ${result.get(0).albums.size} albums retrieved!"
+
+                getArtistImageUrls()
+
             } catch (t: Throwable) {
                 // TODO EMPTY LIST AT REGISTER
                 _response.value = "Failure: " + t.message
             }
         }
+
     }
 
     private fun getArtistImageUrls() {
+        Log.i("MainViewModel", "STARTING URL RETRIEVAL...")
+        val artistImageUrls: MutableMap<String, String> = HashMap()
         for ((key) in sortedMapAlbumCount) {
+            Log.i("MainViewModel", "- " + key)
 
+            coroutineScope.launch {
+                //Log.i("MainViewModel", "Key: " + key.replace("\\s".toRegex(), "_").lowercase())
+                //Log.i("MainViewModel", "Token: " + SpotifyApiGetToken.getSpotifyToken())
+                var getArtistDeferred = SpotifyApi.retrofitService.getArtistDetails(
+                    key
+                )
+                try {
+                    val temp = getArtistDeferred.await()
+                    Log.i("MainViewModel", "Try - Response: " + key + " - " + temp.artists.items[0].images[0].url)
+                } catch (t: Throwable) {
+                    Log.i("MainViewModel", "Catch - Response: " + key + " - " + t.message + t.toString())
+                }
+            }
+            //break
         }
 
         /* coroutineScope.launch {
