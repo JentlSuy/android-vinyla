@@ -143,7 +143,7 @@ class RegisterFragment : Fragment() {
         return binding.root
     }
 
-    fun loading(startLoading: Boolean) {
+    private fun loading(startLoading: Boolean) {
         if (startLoading) {
             binding.registerProgressBar.visibility = View.VISIBLE
             binding.registerNextButton.visibility = View.GONE

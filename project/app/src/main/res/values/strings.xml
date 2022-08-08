@@ -21,4 +21,8 @@
     <string name="main_logout_button_contentDescription">Lougout button for the main screen.</string>
     <string name="create_station">create station</string>
     <string name="main_create_station_button_contentDescription">Creat station button for the main screen.</string>
+    <string name="vinyla_web_button_contentDescription">Redirect button to go to Vinyla web.</string>
+    <string name="web">web</string>
+    <string name="empty_collection_text">You don\'t have any albums in your collection! You can add them by clicking the web button below!</string>
+    <string name="selected_artists">Selected Artists</string>
 </resources>

@@ -33,8 +33,8 @@ import com.example.android_vinyla.network.ArtistProperty
 class PhotoGridAdapter(val onClickListener: OnClickListener) :
     ListAdapter<ArtistProperty, PhotoGridAdapter.ArtistPropertyViewHolder>(DiffCallback) {
     /**
-     * The MarsPropertyViewHolder constructor takes the binding variable from the associated
-     * GridViewItem, which nicely gives it access to the full [MarsProperty] information.
+     * The ArtistPropertyViewHolder constructor takes the binding variable from the associated
+     * GridViewItem, which nicely gives it access to the full [ArtistProperty] information.
      */
     class ArtistPropertyViewHolder(private var binding: GridViewItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -47,7 +47,7 @@ class PhotoGridAdapter(val onClickListener: OnClickListener) :
     }
 
     /**
-     * Allows the RecyclerView to determine which items have changed when the [List] of [MarsProperty]
+     * Allows the RecyclerView to determine which items have changed when the [List] of [ArtistProperty]
      * has been updated.
      */
     companion object DiffCallback : DiffUtil.ItemCallback<ArtistProperty>() {
@@ -82,9 +82,9 @@ class PhotoGridAdapter(val onClickListener: OnClickListener) :
     }
 
     /**
-     * Custom listener that handles clicks on [RecyclerView] items.  Passes the [MarsProperty]
+     * Custom listener that handles clicks on [RecyclerView] items.  Passes the [ArtistProperty]
      * associated with the current item to the [onClick] function.
-     * @param clickListener lambda that will be called with the current [MarsProperty]
+     * @param clickListener lambda that will be called with the current [ArtistProperty]
      */
     class OnClickListener(val clickListener: (artistProperty: ArtistProperty) -> Unit) {
         fun onClick(artistProperty: ArtistProperty) = clickListener(artistProperty)

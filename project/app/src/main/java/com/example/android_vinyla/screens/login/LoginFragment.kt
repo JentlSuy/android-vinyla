@@ -75,7 +75,7 @@ class LoginFragment : Fragment() {
         return binding.root
     }
 
-    fun loading(startLoading: Boolean) {
+    private fun loading(startLoading: Boolean) {
         if (startLoading) {
             binding.loginProgressBar.visibility = View.VISIBLE
             binding.loginButton.visibility = View.GONE

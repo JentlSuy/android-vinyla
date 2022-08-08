@@ -25,7 +25,6 @@ class MainViewModel : ViewModel() {
     private val _itemsUsed = MutableLiveData<Int>()
     val itemsUsed: LiveData<Int> get() = _itemsUsed
 
-    // SELF SELF
     private val _response = MutableLiveData<String>()
     val response: LiveData<String> get() = _response
 
@@ -39,7 +38,15 @@ class MainViewModel : ViewModel() {
 
     private val _artists = MutableLiveData<ArrayList<ArtistProperty>>()
     val artists: LiveData<ArrayList<ArtistProperty>> get() = _artists
-    //val artist: ArtistProperty get() = artists.value!!.get(0)
+
+    private var _emptyCollection = MutableLiveData<Boolean>().apply { postValue(false) }
+    val emptyCollection: LiveData<Boolean> get() = _emptyCollection
+
+    private var _emptySelection = MutableLiveData<Boolean>().apply { postValue(true) }
+    val emptySelection: LiveData<Boolean> get() = _emptySelection
+
+    private val _selectedArtists = MutableLiveData<ArrayList<String>>()
+    val selectedArtists: LiveData<ArrayList<String>> get() = _selectedArtists
 
     // Internally, we use a MutableLiveData to handle navigation to the selected property
     private val _navigateToSelectedProperty = MutableLiveData<ArtistProperty?>()
@@ -54,6 +61,7 @@ class MainViewModel : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     init {
+        _selectedArtists.value = ArrayList()
         _itemsUsed.value = MAX_ITEMS
         getSpotifyToken()
     }
@@ -88,7 +96,6 @@ class MainViewModel : ViewModel() {
                     frequencyMap[album.artistName] = count + 1
                 }
 
-
                 _sortedMapAlbumCount =
                     frequencyMap.toList().sortedBy { (_, key) -> key }.toMap().asIterable()
                         .reversed()
@@ -122,7 +129,6 @@ class MainViewModel : ViewModel() {
                 _response.value = "Failure: " + t.message
             }
         }
-
     }
 
     private fun getArtistImageUrls() {
@@ -131,61 +137,61 @@ class MainViewModel : ViewModel() {
         for ((key) in _sortedMapAlbumCount) {
             Log.i("MainViewModel", "- " + key)
 
-            coroutineScope.launch {
-                _status.value = VinylaApiStatus.LOADING
-                //Log.i("MainViewModel", "Key: " + key.replace("\\s".toRegex(), "_").lowercase())
-                //Log.i("MainViewModel", "Token: " + SpotifyApiGetToken.getSpotifyToken())
+            val handler = Handler(Looper.getMainLooper())
+            handler.postDelayed({
+                coroutineScope.launch {
+                    _status.value = VinylaApiStatus.LOADING
+                    //Log.i("MainViewModel", "Key: " + key.replace("\\s".toRegex(), "_").lowercase())
+                    //Log.i("MainViewModel", "Token: " + SpotifyApiGetToken.getSpotifyToken())
 
-                try {
-                    var getArtistDeferred = SpotifyApi.retrofitService.getArtistDetails(
-                        key
-                    )
-                    val temp = getArtistDeferred.await()
-                    Log.i(
-                        "MainViewModel",
-                        "Try - Response: " + key + " - " + temp.artists.items[0].images[0].url
-                    )
-                    artistsListTemp.add(ArtistProperty(key, temp.artists.items[0].images[0].url))
+                    try {
+                        var getArtistDeferred = SpotifyApi.retrofitService.getArtistDetails(
+                            key
+                        )
+                        val temp = getArtistDeferred.await()
+                        Log.i(
+                            "MainViewModel",
+                            "Try - Response: " + key + " - " + temp.artists.items[0].images[0].url
+                        )
+                        artistsListTemp.add(
+                            ArtistProperty(
+                                key,
+                                temp.artists.items[0].images[0].url
+                            )
+                        )
 
-//                    val handler = Handler(Looper.getMainLooper())
-//                    handler.postDelayed({
-//                        _status.value = VinylaApiStatus.DONE
-//                        // 30 artiesten: 30 * (30 - (30 - 1)) * 10 = 300 ms/artiest ..... 300 * 30 = 9.000 ms/totaal
-//                        // 5 artiesten: 5 * (30 - (5 - 1)) * 10 = 1300 ms/artiest  ..... 1300 * 5 = 6.500 ms/totaal
-//                    }, (_itemsUsed.value!! * (MAX_ITEMS - (_itemsUsed.value!! - 1)) * 10).toLong())
-
-                } catch (t: Throwable) {
-                    _status.value = VinylaApiStatus.ERROR
-                    Log.i(
-                        "MainViewModel",
-                        "Catch - Response: " + key + " - " + t.message + t.toString()
-                    )
+                    } catch (t: Throwable) {
+                        _status.value = VinylaApiStatus.ERROR
+                        Log.i(
+                            "MainViewModel",
+                            "Catch - Response: " + key + " - " + t.message + t.toString()
+                        )
+                    }
                 }
-            }
-
-
+            }, (50))
 
             counter++
             if (counter == MAX_ITEMS)
                 break
         }
 
-
         val handler = Handler(Looper.getMainLooper())
         handler.postDelayed({
             setData()
-//                        // 30 artiesten: 30 * (30 - (30 - 1)) * 10 = 300 ms/artiest ..... 300 * 30 = 9.000 ms/totaal
-//                        // 5 artiesten: 5 * (30 - (5 - 1)) * 10 = 1300 ms/artiest  ..... 1300 * 5 = 6.500 ms/totaal
-            Log.i("MainViewModel", "(" + _itemsUsed.value + " * (" + MAX_ITEMS + " - (" + _itemsUsed.value!! + " - 1)) * 10)")
-        }, (_itemsUsed.value!! * (MAX_ITEMS - (_itemsUsed.value!! - 1)) * 50).toLong())
-
-
-
+            Log.i(
+                "MainViewModel",
+                "(" + _itemsUsed.value + " * (" + MAX_ITEMS + " - (" + _itemsUsed.value!! + " - 1)) * 10)"
+            )
+        }, ((Math.log10(_itemsUsed.value!!.toDouble()) + 2) * 1000).toLong())
     }
 
     private fun setData() {
         _artists.value = artistsListTemp
         _status.value = VinylaApiStatus.DONE
+        if (_itemsUsed.value!! == 0) {
+            _emptyCollection.value = true
+        }
+        Log.i("MainViewModel", "Data set: " + _artists.value!!.count())
     }
 
     override fun onCleared() {
@@ -193,19 +199,30 @@ class MainViewModel : ViewModel() {
         viewModelJob.cancel()
     }
 
-    /**
-     * When the property is clicked, set the [_navigateToSelectedProperty] [MutableLiveData]
-     * @param marsProperty The [MarsProperty] that was clicked on.
-     */
     fun displayPropertyDetails(artistProperty: ArtistProperty) {
-        _navigateToSelectedProperty.value = artistProperty
+        if (_selectedArtists.value!!.contains(artistProperty.name))
+            _selectedArtists.value!!.remove(artistProperty.name)
+        else if (!_selectedArtists.value!!.contains(artistProperty.name))
+            _selectedArtists.value!!.add(artistProperty.name)
+
+        if(_selectedArtists.value!!.isEmpty())
+            _emptySelection.value = true
+        else if(_selectedArtists.value!!.isNotEmpty())
+            _emptySelection.value = false
+
+        //_navigateToSelectedProperty.value = artistProperty
+        Log.i(
+            "MainViewModel",
+            "Selected List Edited - now contains: " + _selectedArtists.value.toString()
+        )
     }
 
-    /**
-     * After the navigation has taken place, make sure navigateToSelectedProperty is set to null
-     */
     fun displayPropertyDetailsComplete() {
         _navigateToSelectedProperty.value = null
     }
 
+    fun refresh() {
+        _artists.value!!.clear()
+        getSpotifyToken()
+    }
 }
