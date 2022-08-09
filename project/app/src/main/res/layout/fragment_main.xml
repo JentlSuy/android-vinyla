@@ -13,7 +13,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/main_linear_layout"
@@ -198,6 +200,93 @@
             </ScrollView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main_redirect_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#7A7A7A"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/main_redirect_cardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/white"
+                app:cardCornerRadius="3dp"
+                app:cardElevation="40dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/main_redirect_close_imageButton"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="3dp"
+                        android:contentDescription="@string/main_redirect_close_imageButton_contentDescription"
+                        android:cropToPadding="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/close_button"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="RedundantDescriptionCheck" />
+
+                    <TextView
+                        android:id="@+id/main_redirect_title_textView"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:fontFamily="@font/libre_baskerville"
+                        android:text="@string/redirect_text"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/main_redirect_artists_textView"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/libre_baskerville"
+                        android:text="@{mainViewModel.selectedArtistsString}"
+                        android:textAlignment="center"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/main_redirect_title_textView"
+                        tools:text="Bring Me The Horizon, Royal Blood, Beyoncé, Bush" />
+
+                    <ProgressBar
+                        android:id="@+id/main_redirect_progressBar"
+                        style="@android:style/Widget.Holo.ProgressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/main_redirect_artists_textView" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/main_footer_constraintLayout"

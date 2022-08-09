@@ -25,4 +25,6 @@
     <string name="web">web</string>
     <string name="empty_collection_text">You don\'t have any albums in your collection! You can add them by clicking the web button below!</string>
     <string name="selected_artists">Selected Artists</string>
+    <string name="redirect_text">You will be redirected with the following artists...</string>
+    <string name="main_redirect_close_imageButton_contentDescription">The close button for the redirect pop-up.</string>
 </resources>

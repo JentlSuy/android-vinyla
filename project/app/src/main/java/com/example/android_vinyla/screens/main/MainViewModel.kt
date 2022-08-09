@@ -48,6 +48,12 @@ class MainViewModel : ViewModel() {
     private val _selectedArtists = MutableLiveData<ArrayList<String>>()
     val selectedArtists: LiveData<ArrayList<String>> get() = _selectedArtists
 
+    private val _selectedArtistsString = MutableLiveData<String>().apply { "" }
+    val selectedArtistsString: LiveData<String> get() = _selectedArtistsString
+
+    private val _streamingServicePackage = MutableLiveData<String>().apply { "com.spotify.music" }
+    val streamingServicePackage: LiveData<String> get() = _streamingServicePackage
+
     // Internally, we use a MutableLiveData to handle navigation to the selected property
     private val _navigateToSelectedProperty = MutableLiveData<ArtistProperty?>()
 
@@ -61,6 +67,8 @@ class MainViewModel : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     init {
+        //com.spotify.music
+        _streamingServicePackage.value = "com.google.android.apps.youtube.music"
         _selectedArtists.value = ArrayList()
         _itemsUsed.value = MAX_ITEMS
         getSpotifyToken()
@@ -200,15 +208,19 @@ class MainViewModel : ViewModel() {
     }
 
     fun displayPropertyDetails(artistProperty: ArtistProperty) {
+        _selectedArtistsString.value = ""
         if (_selectedArtists.value!!.contains(artistProperty.name))
             _selectedArtists.value!!.remove(artistProperty.name)
         else if (!_selectedArtists.value!!.contains(artistProperty.name))
             _selectedArtists.value!!.add(artistProperty.name)
 
-        if(_selectedArtists.value!!.isEmpty())
+        if (_selectedArtists.value!!.isEmpty())
             _emptySelection.value = true
-        else if(_selectedArtists.value!!.isNotEmpty())
+        else if (_selectedArtists.value!!.isNotEmpty()) {
             _emptySelection.value = false
+            _selectedArtistsString.value =
+                _selectedArtists.value.toString().replace("[", "").replace("]", "")
+        }
 
         //_navigateToSelectedProperty.value = artistProperty
         Log.i(
