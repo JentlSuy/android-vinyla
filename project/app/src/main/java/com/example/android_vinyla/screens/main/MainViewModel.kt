@@ -67,8 +67,8 @@ class MainViewModel : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     init {
-        //com.spotify.music
-        _streamingServicePackage.value = "com.google.android.apps.youtube.music"
+        //com.google.android.apps.youtube.music
+        _streamingServicePackage.value = "com.spotify.music"
         _selectedArtists.value = ArrayList()
         _itemsUsed.value = MAX_ITEMS
         getSpotifyToken()
@@ -186,10 +186,6 @@ class MainViewModel : ViewModel() {
         val handler = Handler(Looper.getMainLooper())
         handler.postDelayed({
             setData()
-            Log.i(
-                "MainViewModel",
-                "(" + _itemsUsed.value + " * (" + MAX_ITEMS + " - (" + _itemsUsed.value!! + " - 1)) * 10)"
-            )
         }, ((Math.log10(_itemsUsed.value!!.toDouble()) + 2) * 1000).toLong())
     }
 
@@ -199,7 +195,7 @@ class MainViewModel : ViewModel() {
         if (_itemsUsed.value!! == 0) {
             _emptyCollection.value = true
         }
-        Log.i("MainViewModel", "Data set: " + _artists.value!!.count())
+        Log.i("MainViewModel", "Data set: " + _artists.value!!.count() + "artists")
     }
 
     override fun onCleared() {
@@ -236,5 +232,17 @@ class MainViewModel : ViewModel() {
     fun refresh() {
         _artists.value!!.clear()
         getSpotifyToken()
+    }
+
+    fun overrideEmptySelectionColorBug(override: Boolean) {
+        if (override)
+            _emptySelection.value = false
+        else if (!override)
+            _emptySelection.value = true
+    }
+
+    fun setStreamingService(streamingServicePackageString: String) {
+        _streamingServicePackage.value = streamingServicePackageString
+        Log.i("MainViewModel", "Streaming service set: " + _streamingServicePackage.value)
     }
 }

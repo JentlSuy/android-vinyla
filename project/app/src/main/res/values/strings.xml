@@ -27,4 +27,6 @@
     <string name="selected_artists">Selected Artists</string>
     <string name="redirect_text">You will be redirected with the following artists...</string>
     <string name="main_redirect_close_imageButton_contentDescription">The close button for the redirect pop-up.</string>
+    <string name="choose_streamingService">Choose your streaming service.</string>
+    <string name="streamingService_imageButton">A button to set the streaming service.</string>
 </resources>

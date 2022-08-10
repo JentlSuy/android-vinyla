@@ -11,6 +11,9 @@
         <entry key="app/src/main/res/drawable/circle.xml" value="0.179" />
         <entry key="app/src/main/res/drawable/circle_img.xml" value="0.179" />
         <entry key="app/src/main/res/drawable/custom_drop_shadow_drawable.xml" value="0.2445" />
+        <entry key="app/src/main/res/drawable/imagebutton_border.xml" value="0.256" />
+        <entry key="app/src/main/res/drawable/imagebutton_border_removed.xml" value="0.257" />
+        <entry key="app/src/main/res/drawable/imagebutton_selector.xml" value="0.256" />
         <entry key="app/src/main/res/drawable/text_border.xml" value="0.2215" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.20885416666666667" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.25" />
