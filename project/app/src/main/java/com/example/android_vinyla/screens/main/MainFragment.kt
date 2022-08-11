@@ -19,6 +19,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.android_vinyla.R
+import com.example.android_vinyla.database.UserSettingsDatabase
 import com.example.android_vinyla.databinding.FragmentMainBinding
 
 
@@ -38,7 +39,16 @@ class MainFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_main, container, false
         )
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
+        val application = requireNotNull(this.activity).application
+
+        val dataSource = UserSettingsDatabase.getInstance(application).userSettingsDao
+
+        //viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
+        val viewModelFactory = MainViewModelFactory(dataSource, application)
+
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
 
         binding.mainViewModel = viewModel
 

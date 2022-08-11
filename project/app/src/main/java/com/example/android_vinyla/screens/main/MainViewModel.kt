@@ -1,24 +1,28 @@
 package com.example.android_vinyla.screens.main
 
+import android.app.Application
 import android.os.Handler
 import android.os.Looper
+import android.service.autofill.UserData
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.example.android_vinyla.database.UserSettings
+import com.example.android_vinyla.database.UserSettingsDatabaseDao
 import com.example.android_vinyla.network.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import java.lang.NullPointerException
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
+import java.util.concurrent.Future
+
 
 enum class VinylaApiStatus { LOADING, ERROR, DONE }
 
-class MainViewModel : ViewModel() {
+class MainViewModel(val database: UserSettingsDatabaseDao, application: Application) :
+    AndroidViewModel(application) {
 
     private val MAX_ITEMS = 30
 
@@ -48,10 +52,10 @@ class MainViewModel : ViewModel() {
     private val _selectedArtists = MutableLiveData<ArrayList<String>>()
     val selectedArtists: LiveData<ArrayList<String>> get() = _selectedArtists
 
-    private val _selectedArtistsString = MutableLiveData<String>().apply { "" }
+    private val _selectedArtistsString = MutableLiveData<String>()
     val selectedArtistsString: LiveData<String> get() = _selectedArtistsString
 
-    private val _streamingServicePackage = MutableLiveData<String>().apply { "com.spotify.music" }
+    private val _streamingServicePackage = MutableLiveData<String>()
     val streamingServicePackage: LiveData<String> get() = _streamingServicePackage
 
     // Internally, we use a MutableLiveData to handle navigation to the selected property
@@ -61,17 +65,68 @@ class MainViewModel : ViewModel() {
     val navigateToSelectedProperty: MutableLiveData<ArtistProperty?>
         get() = _navigateToSelectedProperty
 
+    private val _userSettings = MutableLiveData<String>()
+    val userSettings: LiveData<String> get() = _userSettings
+
     var artistsListTemp = ArrayList<ArtistProperty>()
 
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     init {
+        initializeUserSettings()
         //com.google.android.apps.youtube.music
-        _streamingServicePackage.value = "com.spotify.music"
+        //_streamingServicePackage.value = "com.spotify.music"
         _selectedArtists.value = ArrayList()
         _itemsUsed.value = MAX_ITEMS
         getSpotifyToken()
+    }
+
+    private fun initializeUserSettings() {
+        viewModelScope.launch {
+            _streamingServicePackage.value = getUserSettingsFromDatabase()
+        }
+    }
+
+    private fun getUserSettingsFromDatabase(): String {
+        val callable = Callable { database.getUserSettings() }
+
+        val future = Executors.newSingleThreadExecutor().submit(callable)
+
+        val userSettings = future!!.get()
+
+        Log.i("MainViewModel", "Settings currently: " + userSettings?.streamingService)
+
+        var streamingService: String
+
+        try {
+            streamingService = userSettings!!.streamingService
+        } catch (e: NullPointerException) {
+            // If null -> Roomdb = empty so create new.
+            saveStreamingServiceInRoom(UserSettings(1, "com.spotify.music"))
+            return getUserSettingsFromDatabase()
+        }
+
+        return streamingService
+    }
+
+    private fun clear() {
+        val callable = Callable { database.clear() }
+        Executors.newSingleThreadExecutor().submit(callable)
+        Log.i("MainViewModel", "Clear UserSettingsDb")
+        //database.clear()
+    }
+
+    private fun insert(userSettings: UserSettings) {
+        val callable = Callable { database.insert(userSettings) }
+        Executors.newSingleThreadExecutor().submit(callable)
+        Log.i("MainViewModel", "Insert into UserSettingsDb")
+        //database.insert(userSettings)
+    }
+
+    private fun saveStreamingServiceInRoom(userSettings: UserSettings) {
+        clear()
+        insert(userSettings)
     }
 
     private fun getSpotifyToken() {
@@ -243,6 +298,7 @@ class MainViewModel : ViewModel() {
 
     fun setStreamingService(streamingServicePackageString: String) {
         _streamingServicePackage.value = streamingServicePackageString
+        saveStreamingServiceInRoom(UserSettings(1, streamingServicePackageString))
         Log.i("MainViewModel", "Streaming service set: " + _streamingServicePackage.value)
     }
 }

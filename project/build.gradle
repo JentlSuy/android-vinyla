@@ -15,6 +15,7 @@ buildscript {
         version_navigation_fragment_ktx = "2.5.1"
         version_legacy_support_v4 = "1.0.0"
         version_lifecycle = "2.5.0"
+        version_room = '2.2.3'
         version_junit = "4.13.2"
     }
 }
