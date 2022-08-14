@@ -32,7 +32,7 @@ class RegisterFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_register, container, false
         )
-        viewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
+        viewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
 
         binding.registerViewModel = viewModel
 

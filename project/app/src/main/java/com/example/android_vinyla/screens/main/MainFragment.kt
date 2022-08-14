@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.android_vinyla.R
 import com.example.android_vinyla.database.UserSettingsDatabase
 import com.example.android_vinyla.databinding.FragmentMainBinding
+import com.example.android_vinyla.network.VinylaApi
+import com.example.android_vinyla.network.VinylaApiService
 
 
 class MainFragment : Fragment() {
@@ -48,7 +51,7 @@ class MainFragment : Fragment() {
 
         val viewModelFactory = MainViewModelFactory(dataSource, application)
 
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
 
         binding.mainViewModel = viewModel
 
@@ -58,27 +61,31 @@ class MainFragment : Fragment() {
         binding.mainEmptyCollectionText.visibility = View.GONE
 
         binding.photosGrid.adapter = PhotoGridAdapter(PhotoGridAdapter.OnClickListener {
-            viewModel.displayPropertyDetails(it)
+            viewModel.selectArtist(it)
             if (viewModel.selectedArtists.value!!.isNotEmpty()) {
                 binding.mainCreateStationTextview.setTextColor(Color.BLACK)
+                binding.mainSelectedArtistsConstraintLayout.visibility = View.VISIBLE
                 binding.mainCreateStationTextview.setOnClickListener {
                     binding.mainRedirectLayout.visibility = View.VISIBLE
                 }
                 binding.mainCreateStationButton.setOnClickListener {
                     binding.mainRedirectLayout.visibility = View.VISIBLE
                     toggleBackgroundButtons(true)
+                    binding.mainSelectedArtistsConstraintLayout.visibility = View.GONE
                     val handler = Handler(Looper.getMainLooper())
                     handler.postDelayed({
                         launchIntent()
                         handler.postDelayed({
                             binding.photosGrid.visibility = View.VISIBLE
                             binding.mainRedirectLayout.visibility = View.GONE
+                            binding.mainSelectedArtistsConstraintLayout.visibility = View.VISIBLE
                             toggleBackgroundButtons(false)
                         }, 500)
 
                     }, 1500)
                 }
             } else {
+                binding.mainSelectedArtistsConstraintLayout.visibility = View.GONE
                 binding.mainCreateStationTextview.setTextColor(Color.LTGRAY)
                 binding.mainCreateStationTextview.setOnClickListener {}
                 binding.mainCreateStationButton.setOnClickListener {}
@@ -144,6 +151,7 @@ class MainFragment : Fragment() {
             binding.mainLogoutButton.setOnClickListener { }
             binding.mainWebTextview.setOnClickListener { }
             binding.mainVinylaWebButton.setOnClickListener { }
+            binding.mainSelectedArtistsConstraintLayout.visibility = View.GONE
             binding.mainCreateStationTextview.setTextColor(Color.BLACK)
             viewModel.overrideEmptySelectionColorBug(true)
         } else if (!disable) {
@@ -153,14 +161,20 @@ class MainFragment : Fragment() {
                 // TODO RESET DATA
                 viewModel.refresh()
             }
-            //TODO
             binding.mainSettingsButton.setOnClickListener {
                 binding.mainSettingsLayout.visibility = View.VISIBLE
                 toggleBackgroundButtons(true)
             }
-            //TODO
             binding.mainLogoutButton.setOnClickListener {
+                viewModel.logout()
                 findNavController().navigate(R.id.action_mainFragment_to_welcomeFragment)
+                val toast = Toast.makeText(
+                    context,
+                    "You have successfully been logged out.",
+                    Toast.LENGTH_LONG
+                )
+                toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 700)
+                toast.show()
             }
             binding.mainWebTextview.setOnClickListener {
                 val i = Intent(Intent.ACTION_VIEW)
@@ -173,11 +187,14 @@ class MainFragment : Fragment() {
                 startActivity(i)
             }
 
+
             // only set create station color to grey when the selected artists list is empty.
             if (viewModel.selectedArtists.value!!.isEmpty()) {
                 viewModel.overrideEmptySelectionColorBug(false)
                 binding.mainCreateStationTextview.setTextColor(Color.LTGRAY)
-            }
+                binding.mainSelectedArtistsConstraintLayout.visibility = View.GONE
+            } else
+                binding.mainSelectedArtistsConstraintLayout.visibility = View.VISIBLE
 
 
         }
@@ -194,7 +211,7 @@ class MainFragment : Fragment() {
                 context,
                 "Unable to open streaming service. Do you have the app installed?",
                 Toast.LENGTH_LONG
-            ).show();
+            ).show()
     }
 
     private fun setSettingsClickListeners() {

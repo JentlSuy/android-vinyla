@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = [UserSettings::class], version = 1, exportSchema = false)
+@Database(entities = [UserSettings::class], version = 3, exportSchema = false)
 abstract class UserSettingsDatabase : RoomDatabase() {
     abstract val userSettingsDao: UserSettingsDatabaseDao
 

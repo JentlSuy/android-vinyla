@@ -10,5 +10,11 @@ data class UserSettings(
     var id: Long = 0L,
 
     @ColumnInfo(name = "streaming_service")
-    val streamingService: String
+    val streamingService: String,
+
+    @ColumnInfo(name = "bearer_token")
+    val bearerToken: String,
+
+    @ColumnInfo(name = "email")
+    val email: String
 )
