@@ -54,6 +54,8 @@ class RegisterFragment : Fragment() {
 
             loading(true)
 
+
+
             if (!viewModel.checkEmail(binding.registerEmailInput.text.toString())) {
                 binding.registerEmailInput.setError("Incorrect email!")
                 step1ValidationCorrect = false
@@ -81,6 +83,14 @@ class RegisterFragment : Fragment() {
                         loading(false)
                     }
 
+                    if (!binding.registerPasswordConfirmationInput.text.contentEquals(binding.registerPasswordInput.text)) {
+                        binding.registerPasswordConfirmationInput.setError("The passwords do not match!")
+                        binding.registerEmailInput.setError(null)
+                        step1ValidationCorrect = false
+                    } else
+                        binding.registerPasswordConfirmationInput.setError(null)
+
+
                     //Log.i("RegisterFragment", "step1ValidationCorrect " + step1ValidationCorrect)
 
                     val handler = Handler(Looper.getMainLooper())
@@ -96,7 +106,9 @@ class RegisterFragment : Fragment() {
                             binding.registerBackButtonStep2.visibility = View.VISIBLE
                             binding.registerSignupButton.visibility = View.VISIBLE
                             binding.registerPasswordResetWarning.visibility = View.GONE
-                        }
+                            binding.registerPasswordConfirmationInput.visibility = View.GONE
+                        } else if (viewModel.emailAvailable.value.contentEquals("true"))
+                            binding.registerEmailInput.setError(null)
                     }, 1000)
 
                 })
@@ -113,6 +125,7 @@ class RegisterFragment : Fragment() {
             binding.registerSignupButton.visibility = View.GONE
             binding.registerBackButtonStep2.visibility = View.GONE
             binding.registerPasswordResetWarning.visibility = View.VISIBLE
+            binding.registerPasswordConfirmationInput.visibility = View.VISIBLE
             binding.registerEmailInput.setError(null)
             step1ValidationCorrect = false
         }
@@ -145,9 +158,11 @@ class RegisterFragment : Fragment() {
 
     private fun loading(startLoading: Boolean) {
         if (startLoading) {
+            binding.registerPasswordResetWarning.visibility = View.GONE
             binding.registerProgressBar.visibility = View.VISIBLE
             binding.registerNextButton.visibility = View.GONE
         } else if (!startLoading) {
+            binding.registerPasswordResetWarning.visibility = View.VISIBLE
             binding.registerProgressBar.visibility = View.GONE
             binding.registerNextButton.visibility = View.VISIBLE
         }

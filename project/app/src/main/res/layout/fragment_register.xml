@@ -100,18 +100,18 @@
             android:visibility="visible"
             tools:ignore="TouchTargetSizeCheck" />
 
-        <!--   STEP 2 - FIRSTNAME     -->
-
-        <TextView
-            android:id="@+id/register_password_reset_warning"
+        <EditText
+            android:id="@+id/register_password_confirmation_input"
+            style="@style/edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:fontFamily="@font/libre_baskerville_bold"
-            android:text="@string/register_password_reset_warning"
-            android:textAlignment="center"
-            android:textAllCaps="true"
-            android:textColor="@color/black" />
+            android:ems="10"
+            android:hint="@string/confirm_password"
+            android:inputType="textPassword"
+            android:visibility="visible"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <!--   STEP 2 - FIRSTNAME     -->
 
         <EditText
             android:id="@+id/register_firstname_input"
@@ -144,6 +144,17 @@
             android:textColor="@color/white"
             android:textSize="14sp"
             android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/register_password_reset_warning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/libre_baskerville_bold"
+            android:text="@string/register_password_reset_warning"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/black" />
 
         <Button
             android:id="@+id/register_signup_button"
