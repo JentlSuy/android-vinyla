@@ -40,10 +40,10 @@ class RegisterFragment : Fragment() {
 
         // DEVELOPMENT PURPOSES!!!
         //binding.registerEmailInput.setText("testtest@test.com")
-        binding.registerEmailInput.setText("suy.jentl@gmail.com")
-        binding.registerPasswordInput.setText("P@ssword1999")
-        binding.registerFirstnameInput.setText("FirstName")
-        binding.registerLastnameInput.setText("LastName")
+//        binding.registerEmailInput.setText("suy.jentl@gmail.com")
+//        binding.registerPasswordInput.setText("P@ssword1999")
+//        binding.registerFirstnameInput.setText("FirstName")
+//        binding.registerLastnameInput.setText("LastName")
         // TODO
 
         binding.registerBackButton.setOnClickListener {
@@ -51,69 +51,9 @@ class RegisterFragment : Fragment() {
         }
 
         binding.registerNextButton.setOnClickListener {
-
-            loading(true)
-
-
-
-            if (!viewModel.checkEmail(binding.registerEmailInput.text.toString())) {
-                binding.registerEmailInput.setError("Incorrect email!")
-                step1ValidationCorrect = false
-                loading(false)
-            } else {
-
-                viewModel.checkEmailInUse()
-
-                viewModel.emailAvailable.observe(viewLifecycleOwner, Observer {
-                    if (viewModel.emailAvailable.value.contentEquals("false")) {
-                        val handler = Handler(Looper.getMainLooper())
-                        handler.postDelayed({
-                            binding.registerEmailInput.setError("The given email address is already in use!")
-                            loading(false)
-                        }, 1000)
-                        step1ValidationCorrect = false
-                    } else if (viewModel.emailAvailable.value.contentEquals("true")) {
-                        step1ValidationCorrect = true
-                        binding.registerEmailInput.setError(null)
-                    }
-                    if (!viewModel.checkPassword(binding.registerPasswordInput.text.toString())) {
-                        binding.registerPasswordInput.setError("Password must meet the requirements of at least 8 characters, 1 lowercase, 1 uppercase, 1 numeric & 1 special character!")
-                        binding.registerEmailInput.setError(null)
-                        step1ValidationCorrect = false
-                        loading(false)
-                    }
-
-                    if (!binding.registerPasswordConfirmationInput.text.contentEquals(binding.registerPasswordInput.text)) {
-                        binding.registerPasswordConfirmationInput.setError("The passwords do not match!")
-                        binding.registerEmailInput.setError(null)
-                        step1ValidationCorrect = false
-                    } else
-                        binding.registerPasswordConfirmationInput.setError(null)
-
-
-                    //Log.i("RegisterFragment", "step1ValidationCorrect " + step1ValidationCorrect)
-
-                    val handler = Handler(Looper.getMainLooper())
-                    handler.postDelayed({
-                        if (step1ValidationCorrect) {
-                            loading(false)
-                            binding.registerBackButton.visibility = View.GONE
-                            binding.registerEmailInput.visibility = View.GONE
-                            binding.registerPasswordInput.visibility = View.GONE
-                            binding.registerFirstnameInput.visibility = View.VISIBLE
-                            binding.registerLastnameInput.visibility = View.VISIBLE
-                            binding.registerNextButton.visibility = View.GONE
-                            binding.registerBackButtonStep2.visibility = View.VISIBLE
-                            binding.registerSignupButton.visibility = View.VISIBLE
-                            binding.registerPasswordResetWarning.visibility = View.GONE
-                            binding.registerPasswordConfirmationInput.visibility = View.GONE
-                        } else if (viewModel.emailAvailable.value.contentEquals("true"))
-                            binding.registerEmailInput.setError(null)
-                    }, 1000)
-
-                })
-            }
+            validateRegistration()
         }
+
         binding.registerBackButtonStep2.setOnClickListener {
             step1ValidationCorrect = false
             binding.registerBackButton.visibility = View.VISIBLE
@@ -154,6 +94,72 @@ class RegisterFragment : Fragment() {
             }
         }
         return binding.root
+    }
+
+     private fun validateRegistration(): Boolean {
+        loading(true)
+
+        if (!viewModel.checkEmail(binding.registerEmailInput.text.toString())) {
+            binding.registerEmailInput.setError("Incorrect email!")
+            step1ValidationCorrect = false
+            loading(false)
+        } else {
+
+            viewModel.checkEmailInUse()
+
+            viewModel.emailAvailable.observe(viewLifecycleOwner, Observer {
+                if (viewModel.emailAvailable.value.contentEquals("false")) {
+                    val handler = Handler(Looper.getMainLooper())
+                    handler.postDelayed({
+                        binding.registerEmailInput.setError("The given email address is already in use!")
+                        loading(false)
+                    }, 1000)
+                    step1ValidationCorrect = false
+                } else if (viewModel.emailAvailable.value.contentEquals("true")) {
+                    step1ValidationCorrect = true
+                    binding.registerEmailInput.setError(null)
+                }
+                if (!viewModel.checkPassword(binding.registerPasswordInput.text.toString())) {
+                    binding.registerPasswordInput.setError("Password must meet the requirements of at least 8 characters, 1 lowercase, 1 uppercase, 1 numeric & 1 special character!")
+                    binding.registerEmailInput.setError(null)
+                    step1ValidationCorrect = false
+                    loading(false)
+                }
+
+                if (!binding.registerPasswordConfirmationInput.text.contentEquals(binding.registerPasswordInput.text)) {
+                    binding.registerPasswordConfirmationInput.setError("The passwords do not match!")
+                    binding.registerEmailInput.setError(null)
+                    step1ValidationCorrect = false
+                } else
+                    binding.registerPasswordConfirmationInput.setError(null)
+
+
+                //Log.i("RegisterFragment", "step1ValidationCorrect " + step1ValidationCorrect)
+
+                val handler = Handler(Looper.getMainLooper())
+                handler.postDelayed({
+                    if (step1ValidationCorrect) {
+                        loading(false)
+                        binding.registerBackButton.visibility = View.GONE
+                        binding.registerEmailInput.visibility = View.GONE
+                        binding.registerPasswordInput.visibility = View.GONE
+                        binding.registerFirstnameInput.visibility = View.VISIBLE
+                        binding.registerLastnameInput.visibility = View.VISIBLE
+                        binding.registerNextButton.visibility = View.GONE
+                        binding.registerBackButtonStep2.visibility = View.VISIBLE
+                        binding.registerSignupButton.visibility = View.VISIBLE
+                        binding.registerPasswordResetWarning.visibility = View.GONE
+                        binding.registerPasswordConfirmationInput.visibility = View.GONE
+                    } else if (viewModel.emailAvailable.value.contentEquals("true"))
+                        binding.registerEmailInput.setError(null)
+                }, 1000)
+
+            })
+        }
+        return if (step1ValidationCorrect)
+            false
+        else
+            false
     }
 
     private fun loading(startLoading: Boolean) {

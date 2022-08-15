@@ -38,7 +38,7 @@ class RegisterViewModel : ViewModel() {
     val bearerToken: LiveData<String> get() = _bearerToken
 
     fun checkEmail(email: String): Boolean {
-        if (TextUtils.isEmpty(email)) {
+        if (email.isEmpty()) {
             Log.i("RegisterViewModel", "EMPTY EMAIL")
             return false;
         } else {

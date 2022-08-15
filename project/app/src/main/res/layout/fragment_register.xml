@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_register"
     tools:context=".screens.register.RegisterFragment">
 
     <data>
@@ -96,6 +97,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/password"
+            android:importantForAutofill="no"
             android:inputType="textPassword"
             android:visibility="visible"
             tools:ignore="TouchTargetSizeCheck" />
@@ -107,6 +109,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/confirm_password"
+            android:importantForAutofill="no"
             android:inputType="textPassword"
             android:visibility="visible"
             tools:ignore="TouchTargetSizeCheck" />
