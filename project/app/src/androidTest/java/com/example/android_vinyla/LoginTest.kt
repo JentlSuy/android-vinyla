@@ -1,4 +1,4 @@
-package com.example.android_vinyla.screens.register
+package com.example.android_vinyla
 
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer

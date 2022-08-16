@@ -1,4 +1,4 @@
-package com.example.android_vinyla.screens.register
+package com.example.android_vinyla
 
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
@@ -27,6 +27,9 @@ class WelcomeTest {
         scenario.moveToState(Lifecycle.State.STARTED)
     }
 
+    // This test will sometimes fail, can not change sequence of tests, ...
+    // ... so an active user could already be logged in at this paint, ...
+    // ... making this test fail. Unable to bypass with try catch.
     @Test
     fun welcomeFragmentVisible() {
         Espresso.onView(ViewMatchers.withId(R.id.title_layout)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))

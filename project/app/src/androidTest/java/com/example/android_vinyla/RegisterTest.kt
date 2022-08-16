@@ -1,8 +1,5 @@
-package com.example.android_vinyla.screens.register
+package com.example.android_vinyla
 
-import android.os.Handler
-import android.os.Looper
-import android.view.View
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.Lifecycle
@@ -14,11 +11,8 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 //import androidx.test.ext.junit.rules.activityScenarioRule
-import com.example.android_vinyla.MainActivity
-import com.example.android_vinyla.screens.login.LoginFragment
-import com.example.android_vinyla.R
+import com.example.android_vinyla.screens.register.RegisterFragment
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
