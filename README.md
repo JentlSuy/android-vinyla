@@ -39,15 +39,15 @@ Deze API gebruik ik voor android-vinyla ook. De applicatie maakt gebruik van 3 v
 
 ## Vereisten opdracht die al toegelicht kunnen worden:
 - UI opbouw: Er werd zoveel mogelijk gewerkt met recyclerviews zodat het scherm altijd wordt aangepast naargelang de schermgrootte. Daarnaast zijn er ook vele navigaties geanimeerd.
-- UI technisch: Er worden binding adapters gebruikt en gewone binding gebruikt. Ik heb ervoor gezorgd om de app een unieke en mooie look & feel te geven.
+- UI technisch: Er worden binding adapters en gewone binding gebruikt. Er werd voor gezorgd dat de app een unieke en mooie look & feel heeft.
 - Testing: Alle fragments worden getest met behulp van Espresso.
-- Codekwaliteit: De meeste functies zijn onderverdeeld in kleinere subfuncties om de code duidelijker te maken. Daarnaast werden de meeste functies uitgelegd door boven de functies nota's te schrijven.
+- Codekwaliteit: De meeste functies zijn onderverdeeld in kleinere subfuncties om de code duidelijker te maken. Daarnaast werden de meeste functies uitgelegd door boven de functies annotaties te schrijven.
 - Lifecycle: Aangezien de applicatie geen gebruik maakt van CPU-heavy animaties werd er weinig gebruik gemaakt van een custom lifecycle. Enkel bij de onResume van het welkom scherm wordt er gecontroleerd of de applicatie alreeds een ingelogde gebruiker heeft door de Room Database te controleren.
 - Netwerk: Er worden heel wat API-calls gebruikt met behulp van Retrofit, namelijk naar vinyla-api, spotify-token-api & spotify-api.
 - Persistentie: De applicatie is voorzien van een Room Database die de gebruiker zelf opslaat en de instellingen die werden gekozen door de gebruiker. Deze worden automatisch opgehaald bij het openen van de app.
 
 ## Screenshots van de applicatie:
-Welkom scherm: de gebruiker wordt begroet door een welkom scherm met een willekeurige achtergrond.
+Welkom scherm: de gebruiker wordt begroet door een welkom scherm met een willekeurige achtergrond van albumhoezen.
 
 <img width="913" alt="image" src="https://user-images.githubusercontent.com/56795157/185234870-dca9bb9d-d04e-41fd-9db0-adf506137ac1.png">
 &nbsp;
@@ -57,7 +57,7 @@ Login en registreer scherm: alle gegevens zoals wachtwoord- en emailvereisten wo
 <img width="913" alt="image" src="https://user-images.githubusercontent.com/56795157/185236022-45749d01-641a-4c63-b8a2-efb27a36bf79.png">
 &nbsp;
 
-Hoofd scherm: de gebruiker kan meerdere artiesten aanduiden en vervolgens klikken op 'create station'. De streamingservicee kan ingesteld worden via de instellingen knop.
+Hoofd scherm: de gebruiker kan meerdere artiesten aanduiden en vervolgens klikken op 'create station'. De streamingservice kan ingesteld worden via de instellingen knop.
 
 <img width="913" alt="image" src="https://user-images.githubusercontent.com/56795157/185237323-1c091a17-e35d-41b0-9d69-3a3097c4179a.png">
 
@@ -68,7 +68,7 @@ Er zijn niet enorm veel fragments gebruikt, maar het hoofdscherm bevat enorm vee
 Alle schermen worden getest met behulp van het Espresso framework. Onderliggende code zonder de schermen effectief te gebruiken zijn niet gelukt om te testen.  
 
 
-De welcomeFragmentVisible test werd enkel wanneer deze als eerste wordt uitgevoerd. Anders denkt de applicatie dat er al een gebruiker is ingelogd en wordt het welkoms scherm niet weergegeven.
+De welcomeFragmentVisible test werkt alleen wanneer deze als eerste wordt uitgevoerd. Anders denkt de applicatie dat er al een gebruiker is ingelogd en wordt het welkoms scherm niet weergegeven.
 
 <img width="913" alt="image" src="https://user-images.githubusercontent.com/56795157/185238459-71be0520-cdfe-4eb5-b018-f5e26982c8e9.png">
 <img width="913" alt="image" src="https://user-images.githubusercontent.com/56795157/185238986-173ae532-3136-45f3-b20b-b147db84157b.png">
