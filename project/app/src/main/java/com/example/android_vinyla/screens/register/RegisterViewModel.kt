@@ -37,6 +37,12 @@ class RegisterViewModel : ViewModel() {
     private val _bearerToken = MutableLiveData<String>()
     val bearerToken: LiveData<String> get() = _bearerToken
 
+    private var viewModelJob = Job()
+    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+
+    /**
+     * Checks if the email is valid.
+     */
     fun checkEmail(email: String): Boolean {
         if (email.isEmpty()) {
             Log.i("RegisterViewModel", "EMPTY EMAIL")
@@ -52,9 +58,9 @@ class RegisterViewModel : ViewModel() {
         }
     }
 
-    private var viewModelJob = Job()
-    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
-
+    /**
+     * Checks if the email is already in use.
+     */
     fun checkEmailInUse() {
         coroutineScope.launch {
             _emailAvailable.value = "false"
@@ -70,6 +76,9 @@ class RegisterViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Calls the API and creates an account for the user.
+     */
     fun signUp() {
         val requestBody = RegisterRequestProperty(
             _email.value.toString(),
@@ -89,8 +98,6 @@ class RegisterViewModel : ViewModel() {
                 Log.i("RegisterViewModel", "Catch - Response: " + t.message + t.toString())
             }
         }
-        // TODO null
-        //Log.i("RegisterViewModel", "Catch - Response BEARER: " + _bearerToken.value.toString())
         VinylaApi.setBearerToken(_bearerToken.value.toString())
         VinylaApi.setEmail(_email.value.toString())
     }
@@ -99,6 +106,9 @@ class RegisterViewModel : ViewModel() {
         super.onCleared()
     }
 
+    /**
+     * Checks if the password is valid.
+     */
     fun checkPassword(password: String): Boolean {
         if (password.length < 8) return false
         if (password.filter { it.isDigit() }.firstOrNull() == null) return false
@@ -111,6 +121,9 @@ class RegisterViewModel : ViewModel() {
         return true
     }
 
+    /**
+     * Checks if the names aren't empty.
+     */
     fun checkName(name: String, firstname: Boolean): Boolean {
         if (name.length < 2) return false
         if (firstname)

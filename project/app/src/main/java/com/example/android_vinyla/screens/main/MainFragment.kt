@@ -158,7 +158,7 @@ class MainFragment : Fragment() {
             binding.mainRefreshButton.setOnClickListener {
                 binding.photosGrid.visibility = View.VISIBLE
                 binding.mainEmptyCollectionText.visibility = View.GONE
-                // TODO RESET DATA
+                // TODO REFRESH NOT WORKING IN UI, WORKS BEHIND THE SCREENS
                 viewModel.refresh()
             }
             binding.mainSettingsButton.setOnClickListener {
@@ -206,12 +206,15 @@ class MainFragment : Fragment() {
                 ?.getLaunchIntentForPackage(viewModel.streamingServicePackage.value!!);
         if (launchIntent != null)
             startActivity(launchIntent);//null pointer check in case package name was not found
-        else
-            Toast.makeText(
+        else {
+            val toast = Toast.makeText(
                 context,
                 "Unable to open streaming service. Do you have the app installed?",
                 Toast.LENGTH_LONG
-            ).show()
+            )
+            toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 550)
+            toast.show()
+        }
     }
 
     private fun setSettingsClickListeners() {

@@ -17,11 +17,11 @@
             android:clickable="false"
             android:contentDescription="@string/hello_blank_fragment"
             android:scaleType="centerCrop"
-            android:src="@drawable/welcome_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/welcome_background_01" />
 
         <ImageView
             android:id="@+id/welcome_vinyla_logo_square_shadow"

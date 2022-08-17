@@ -38,14 +38,6 @@ class RegisterFragment : Fragment() {
 
         binding.lifecycleOwner = this
 
-        // DEVELOPMENT PURPOSES!!!
-        //binding.registerEmailInput.setText("testtest@test.com")
-//        binding.registerEmailInput.setText("suy.jentl@gmail.com")
-//        binding.registerPasswordInput.setText("P@ssword1999")
-//        binding.registerFirstnameInput.setText("FirstName")
-//        binding.registerLastnameInput.setText("LastName")
-        // TODO
-
         binding.registerBackButton.setOnClickListener {
             findNavController().navigate(R.id.action_registerFragment_to_welcomeFragment)
         }
@@ -82,11 +74,6 @@ class RegisterFragment : Fragment() {
             }
 
             if (step2ValidationCorrect) {
-                // TODO
-                Log.i(
-                    "RegisterFragment",
-                    "SignUp button was pressed! Creating account...\n${viewModel.email.value}\n${viewModel.password.value}\n${viewModel.firstname.value}\n${viewModel.lastname.value}"
-                )
 
                 viewModel.signUp()
 

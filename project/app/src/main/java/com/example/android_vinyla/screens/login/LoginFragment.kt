@@ -39,11 +39,6 @@ class LoginFragment : Fragment() {
 
         binding.lifecycleOwner = this
 
-        // DEV TODO
-//        binding.loginEmailInput.setText("suy.jentl@gmail.com")
-//        binding.loginPasswordInput.setText("P@ssword1999")
-        // DEV
-
         binding.loginBackButton.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_welcomeFragment)
         }

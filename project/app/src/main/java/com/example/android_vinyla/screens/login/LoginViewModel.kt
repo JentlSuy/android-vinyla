@@ -31,6 +31,9 @@ class LoginViewModel : ViewModel() {
     private var _correctPassword = MutableLiveData<Boolean>().apply { postValue(false) }
     val correctPassword: LiveData<Boolean> get() = _correctPassword
 
+    /**
+     * Calls the API and logs the user in. Sets the [_bearerToken] which is retrieved from the login request.
+     */
     fun logIn(email: String, password: String): Boolean {
         _email.value = email
         _password.value = password
@@ -49,7 +52,6 @@ class LoginViewModel : ViewModel() {
                 Log.i("LoginViewModel", "Response: " + t.message)
             }
         }
-        //_response.value = "Set the Vinyla API response here!"
         VinylaApi.setBearerToken(_bearerToken.value.toString())
         VinylaApi.setEmail(_email.value.toString())
         return _correctPassword.value!!

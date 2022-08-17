@@ -16,6 +16,7 @@ import com.example.android_vinyla.databinding.FragmentWelcomeBinding
 import com.example.android_vinyla.screens.main.MainViewModel
 import com.example.android_vinyla.screens.main.MainViewModelFactory
 import com.example.android_vinyla.screens.register.RegisterViewModel
+import java.util.*
 
 class WelcomeFragment : Fragment() {
 
@@ -37,8 +38,15 @@ class WelcomeFragment : Fragment() {
 
         viewModel = ViewModelProvider(this, viewModelFactory)[WelcomeViewModel::class.java]
 
-        // set random background TODO
-        // binding.welcomeBackground.setImageResource(R.drawable.vinyla_logo_square);
+        val random = Random()
+        when (random.nextInt(5)) {
+            0 -> binding.welcomeBackground.setImageResource(R.drawable.welcome_background_01)
+            1 -> binding.welcomeBackground.setImageResource(R.drawable.welcome_background_02)
+            2 -> binding.welcomeBackground.setImageResource(R.drawable.welcome_background_03)
+            3 -> binding.welcomeBackground.setImageResource(R.drawable.welcome_background_04)
+            4 -> binding.welcomeBackground.setImageResource(R.drawable.welcome_background_05)
+            else -> binding.welcomeBackground.setImageResource(R.drawable.welcome_background_01)
+        }
 
         checkAlreadyLoggedIn()
 
@@ -64,11 +72,6 @@ class WelcomeFragment : Fragment() {
         } catch (e: IllegalArgumentException) {
 
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.i("WelcomeFragment", "onPause Called")
     }
 
     override fun onResume() {

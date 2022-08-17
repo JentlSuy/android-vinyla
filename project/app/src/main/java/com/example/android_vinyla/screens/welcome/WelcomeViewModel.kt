@@ -31,6 +31,12 @@ class WelcomeViewModel(val database: UserSettingsDatabaseDao, application: Appli
         }
     }
 
+    /**
+     * Calls the Room Database to retrieve the user's [_bearerToken].
+     * Uses a try catch block to check if the Room Database is contains data.
+     * If not it creates an empty [UserSettings] object.
+     * Else it will automaticly log the user in.
+     */
     private fun getBearerTokenFromDatabase(): String {
         val callable = Callable { database.getUserSettings() }
         val future = Executors.newSingleThreadExecutor().submit(callable)
@@ -45,16 +51,26 @@ class WelcomeViewModel(val database: UserSettingsDatabaseDao, application: Appli
             email = userSettings!!.email
         } catch (e: NullPointerException) {
             // If null -> Roomdb = empty so create new.
-            saveBearerTokenInRoom(UserSettings(1, "com.spotify.music", VinylaApi.getBearerToken(), VinylaApi.getEmail()))
+            saveBearerTokenInRoom(
+                UserSettings(
+                    1,
+                    "com.spotify.music",
+                    VinylaApi.getBearerToken(),
+                    VinylaApi.getEmail()
+                )
+            )
             return getBearerTokenFromDatabase()
         }
-        Log.i("WelcomeViewModel", "token " + bearerToken)
-        Log.i("WelcomeViewModel", "email " + email)
+        Log.i("WelcomeViewModel", "token $bearerToken")
+        Log.i("WelcomeViewModel", "email $email")
         VinylaApi.setEmail(email)
         VinylaApi.setBearerToken(bearerToken)
         return bearerToken
     }
 
+    /**
+     * Clears the Room [database].
+     */
     private fun clear() {
         val callable = Callable { database.clear() }
         Executors.newSingleThreadExecutor().submit(callable)
@@ -62,6 +78,9 @@ class WelcomeViewModel(val database: UserSettingsDatabaseDao, application: Appli
         //database.clear()
     }
 
+    /**
+     * Inserts an updated / new [userSettings] object into the Room [database].
+     */
     private fun insert(userSettings: UserSettings) {
         val callable = Callable { database.insert(userSettings) }
         Executors.newSingleThreadExecutor().submit(callable)
@@ -69,6 +88,9 @@ class WelcomeViewModel(val database: UserSettingsDatabaseDao, application: Appli
         //database.insert(userSettings)
     }
 
+    /**
+     * Help functions which calls [clear] and [insert].
+     */
     private fun saveBearerTokenInRoom(userSettings: UserSettings) {
         Log.i("WelcomeViewModel", "saveBearerTokenFromDatabase")
         clear()

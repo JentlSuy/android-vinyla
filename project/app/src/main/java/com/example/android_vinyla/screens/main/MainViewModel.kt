@@ -330,6 +330,9 @@ class MainViewModel(val database: UserSettingsDatabaseDao, application: Applicat
         viewModelJob.cancel()
     }
 
+    /**
+     * When the user clicks on an artist, it sets the data for the [selectedArtists] and [selectedArtistsString].
+     */
     fun selectArtist(artistProperty: ArtistProperty) {
         _selectedArtistsString.value = ""
         if (_selectedArtists.value!!.contains(artistProperty.name))
@@ -344,25 +347,33 @@ class MainViewModel(val database: UserSettingsDatabaseDao, application: Applicat
             _selectedArtistsString.value =
                 _selectedArtists.value.toString().replace("[", "").replace("]", "")
         }
-
-        //_navigateToSelectedProperty.value = artistProperty
         Log.i(
             "MainViewModel",
             "Selected List Edited - now contains: " + _selectedArtists.value.toString()
         )
     }
 
+    /**
+     * Refreshes the data by clearing the [artists] and retrieving the data gain from the API's.
+     */
     fun refresh() {
         _artists.value!!.clear()
         getSpotifyToken()
     }
 
+    /**
+     * Clears all the data in the API class and Room databases and logs the user out.
+     * Returns to the welcome fragment.
+     */
     fun logout() {
         VinylaApi.setBearerToken("")
         VinylaApi.setEmail("")
         clear()
     }
 
+    /**
+     * Help function to fix a color bug in the fragment of this class.
+     */
     fun overrideEmptySelectionColorBug(override: Boolean) {
         if (override)
             _emptySelection.value = false
@@ -370,6 +381,10 @@ class MainViewModel(val database: UserSettingsDatabaseDao, application: Applicat
             _emptySelection.value = true
     }
 
+    /**
+     * Retrieves a [streamingServicePackageString] from the fragment and
+     * sets the [_streamingServicePackage] which is connected with the [database].
+     */
     fun setStreamingService(streamingServicePackageString: String) {
         _streamingServicePackage.value = streamingServicePackageString
         saveStreamingServiceInRoom(
