@@ -4,17 +4,6 @@ De bedoeling is om met een eenvoudige login je favoriete artiesten te zien in ee
 
 De gebruiker kan meerdere artiesten aanduiden door op de foto van een artiest te drukken. Vervolgens kan de gebruiker ervoor kiezen om een persoonlijk station / playlist af te spelen van de gekozen artiest(en). Hiervoor verwijst de app automatisch naar door de gebruiker gekozen muziek-streaming app. Deze kan worden ingesteld via de instellingen knop.
 
-## Login gegevens voor leerkrachten / HOGENT:
-- email: webiv@hogent.be
-- wachtwoord: H0gentP@ss
-
-U mag natuurlijk ook altijd zelf een account aanmaken! :)  
-Wachtwoorden worden automatisch geëncrypteerd in de databank.  
-
-Vergeet niet om na het aanmaken van uw account naar de website van vinyla te surfen om je favoriete albums te kunnen toevoegen. Hiervoor kan u gebruik maken van de web knop, naast de create station knop.
-
-Kleine toelichting: de refresh knop werkt niet naar behoren. De data wordt effectief opnieuw opgehaald maar de lijst van foto's wordt niet geüpdatet. Indien u de artiesten van de nieuwe albums wilt weergeven dient u de applicatie opnieuw te starten. Dit is een kleine bug en is mij niet gelukt om op te lossen.
-
 ## Hoe vinyla voor Android werkt:
 #### Origine vinyla:
 Voor het vak Webapplicaties IV had ik een databank, API en webapplicatie geschreven waarbij de gebruiker zijn / haar favoriete albums kan opzoeken en toevoegen als favoriet, om er zo een mooi overzicht van te kunnen hebben.
